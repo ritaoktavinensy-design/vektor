@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vektor Fisika Kelas XI - Resultan Vektor</title>
+    <style>
+        /* --- CSS VARIABLES & BASE --- */
+        :root {
+            --navy: #1a237e;
+            --blue-main: #2196f3;
+            --blue-light: #e3f2fd;
+            --yellow: #ffeb3b;
+            --pink-bg: #fce4ec;
+            --white: #ffffff;
+            --text-dark: #333333;
+            --gray-light: #f5f5f5;
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--gray-light);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .hidden { display: none !important; }
+
+        /* --- STICKY HEADER --- */
+        header {
+            background: var(--navy);
+            padding: 0.5rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            gap: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 5px;
+        }
+
+        nav button {
+            background: transparent;
+            border: none;
+            color: rgba(255,255,255,0.8);
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        nav button:hover, nav button.active {
+            background: var(--blue-main);
+            color: white;
+        }
+
+        .header-tools {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tool-btn {
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- MAIN LAYOUT --- */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+        }
+
+        /* --- HERO SECTION (BERANDA) --- */
+        #beranda-hero {
+            background: var(--pink-bg);
+            padding: 40px;
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .hero-content { flex: 1; min-width: 300px; }
+        .hero-image { flex: 1; min-width: 300px; text-align: center; }
+        
+        .hero-content h1 { color: var(--navy); font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero-content p { font-size: 1.1rem; margin-bottom: 1.5rem; }
+
+        .btn-start {
+            background: var(--blue-main);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+        }
+
+        .progress-dashboard {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .progress-bar-container {
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        #main-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue-main), #4caf50);
+            width: 0%;
+            transition: width 1s ease-in-out;
+        }
+
+        /* --- MATERI SECTION --- */
+        .materi-tabs {
+            display: flex;
+            overflow-x: auto;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 5px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: var(--navy);
+            color: white;
+            border-color: var(--navy);
+        }
+
+        /* --- SIMULASI --- */
+        .sim-box {
+            display: flex;
+            gap: 20px;
+            background: #fff;
+            padding: 20px;
+            border-radius: var(--radius);
+            border: 2px solid var(--blue-light);
+        }
+
+        canvas {
+            background: #fafafa;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            touch-action: none;
+            width: 100%;
+            height: auto;
+        }
+
+        /* --- LATIHAN / QUIZ --- */
+        .quiz-option {
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quiz-option:hover { background: var(--blue-light); border-color: var(--blue-main); }
+        .quiz-option.correct { background: #d4edda; border-color: #28a745; }
+        .quiz-option.wrong { background: #f8d7da; border-color: #dc3545; }
+
+        .drop-zone {
+            min-height: 80px;
+            border: 2px dashed var(--blue-main);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #fafafa;
+        }
+
+        .drag-item {
+            padding: 10px 20px;
+            background: var(--white);
+            border: 1px solid var(--blue-main);
+            border-radius: 8px;
+            cursor: grab;
+            user-select: none;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            header { flex-direction: column; height: auto; }
+            nav ul { flex-wrap: wrap; justify-content: center; padding: 10px 0; }
+            .hero-content h1 { font-size: 1.8rem; }
+            .sim-box { flex-direction: column; }
+            .tool-btn { width: 35px; height: 35px; }
+            .btn-start { width: 100%; }
+        }
+
+        /* Flashcard Animation */
+        .flashcard {
+            perspective: 1000px;
+            width: 100%;
+            height: 200px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            border-radius: var(--radius);
+            font-size: 1.2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .flashcard-front { background: var(--blue-main); color: white; }
+        .flashcard-back { background: var(--yellow); color: var(--navy); transform: rotateY(180deg); }
+
+        /* Icons */
+        .svg-icon { width: 24px; height: 24px; fill: currentColor; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo-section">
+        <svg class="svg-icon" viewBox="0 0 24 24"><path d="M12,2L4.5,20.29L5.21,21L12,18L18.79,21L19.5,20.29L12,2Z"/></svg>
+        <span>VektorPhysic XI</span>
+    </div>
+    <nav>
+        <ul id="main-nav">
+            <li><button onclick="nav('beranda')" class="active" id="nav-beranda">Beranda</button></li>
+            <li><button onclick="nav('materi')" id="nav-materi">Materi</button></li>
+            <li><button onclick="nav('contoh')" id="nav-contoh">Contoh</button></li>
+            <li><button onclick="nav('latihan')" id="nav-latihan">Latihan</button></li>
+            <li><button onclick="nav('refleksi')" id="nav-refleksi">Refleksi</button></li>
+            <li><button onclick="nav('pengembang')" id="nav-pengembang">Pengembang</button></li>
+        </ul>
+    </nav>
+    <div class="header-tools">
+        <button class="tool-btn" onclick="toggleMute()" id="mute-btn" title="Musik">
+            <svg class="svg-icon" viewBox="0 0 24 24" id="audio-icon"><path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.01,19.86 21,16.28 21,12C21,7.72 18.01,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/></svg>
+        </button>
+        <button class="tool-btn" onclick="toggleFullScreen()" title="Full Screen">
+            <svg class="svg-icon" viewBox="0 0 24 24"><path d="M7,14H5V19H10V17H7V14M5,10H7V7H10V5H5V10M17,17H14V19H19V14H17V17M14,5V7H17V10H19V5H14Z"/></svg>
+        </button>
+    </div>
+</header>
+
+<main>
+    <!-- SECTION BERANDA -->
+    <section id="sec-beranda">
+        <div id="beranda-hero">
+            <div class="hero-content">
+                <h1>Halo, Penjelajah Vektor! 🚀</h1>
+                <p>Belajar cara jitu menggambar resultan vektor dengan metode Jajar Genjang dan Poligon secara interaktif dan menyenangkan.</p>
+                <button class="btn-start" onclick="nav('materi')">Mulai Belajar</button>
+            </div>
+            <div class="hero-image">
+                <!-- SVG Illustration of Vectors -->
+                <svg width="250" height="200" viewBox="0 0 250 200">
+                    <defs>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                          <path d="M0,0 L0,6 L9,3 z" fill="#1a237e" />
+                        </marker>
+                    </defs>
+                    <line x1="20" y1="180" x2="100" y2="180" stroke="#2196f3" stroke-width="4" marker-end="url(#arrow)" />
+                    <line x1="20" y1="180" x2="80" y2="100" stroke="#f44336" stroke-width="4" marker-end="url(#arrow)" />
+                    <line x1="20" y1="180" x2="160" y2="100" stroke="#4caf50" stroke-width="6" marker-end="url(#arrow)" />
+                    <text x="50" y="195" font-weight="bold">A</text>
+                    <text x="30" y="140" font-weight="bold">B</text>
+                    <text x="100" y="130" font-weight="bold" fill="#4caf50">Resultan</text>
+                </svg>
+            </div>
+        </div>
+
+        <div class="progress-dashboard card">
+            <div>
+                <h3>Progres Belajar</h3>
+                <div class="progress-bar-container">
+                    <div id="main-progress-fill"></div>
+                </div>
+                <p id="progress-text">0% Selesai</p>
+            </div>
+            <div style="text-align:center">
+                <h3>Badge Kamu</h3>
+                <div id="badge-display" style="font-size: 3rem;">🥚</div>
+                <p id="badge-name">Pemula</p>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px">
+            <div class="card">
+                <h4>Contoh Jajar Genjang</h4>
+                <div style="height:120px; background: #eee; border-radius:10px; margin-top:10px; display:flex; align-items:center; justify-content:center;">
+                    <svg width="150" height="100" viewBox="0 0 150 100">
+                        <path d="M20,80 L80,80 L120,30 L60,30 Z" fill="none" stroke="#2196f3" stroke-width="2" stroke-dasharray="4"/>
+                        <line x1="20" y1="80" x2="120" y2="30" stroke="orange" stroke-width="3" />
+                    </svg>
+                </div>
+            </div>
+            <div class="card">
+                <h4>Contoh Poligon</h4>
+                <div style="height:120px; background: #eee; border-radius:10px; margin-top:10px; display:flex; align-items:center; justify-content:center;">
+                    <svg width="150" height="100" viewBox="0 0 150 100">
+                        <polyline points="20,80 70,80 100,40 140,50" fill="none" stroke="#2196f3" stroke-width="2" />
+                        <line x1="20" y1="80" x2="140" y2="50" stroke="red" stroke-width="2" stroke-dasharray="2"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION MATERI -->
+    <section id="sec-materi" class="hidden">
+        <div class="materi-tabs">
+            <button class="tab-btn active" onclick="showMateri(1)">1. Apa itu Resultan?</button>
+            <button class="tab-btn" onclick="showMateri(2)">2. Langkah Jajar Genjang</button>
+            <button class="tab-btn" onclick="showMateri(3)">3. Langkah Poligon</button>
+            <button class="tab-btn" onclick="showMateri(4)">4. Flashcard Kunci</button>
+            <button class="tab-btn" onclick="showMateri(5)">5. Eksplorasi</button>
+        </div>
+
+        <div class="card" id="materi-container">
+            <!-- Dinamis via JS -->
+        </div>
+
+        <div style="display:flex; justify-content: space-between;">
+            <button class="btn-start" style="padding:10px 20px; font-size:1rem" id="btn-prev-materi" onclick="prevMateri()">Sebelumnya</button>
+            <button class="btn-start" style="padding:10px 20px; font-size:1rem" id="btn-next-materi" onclick="nextMateri()">Berikutnya</button>
+        </div>
+    </section>
+
+    <!-- SECTION CONTOH SOAL -->
+    <section id="sec-contoh" class="hidden">
+        <h2 style="margin-bottom:20px; color:var(--navy)">💡 Contoh Menggambar Resultan</h2>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px">
+            <div class="card">
+                <h3>Contoh 1: Jajar Genjang</h3>
+                <p>Menggambar resultan dua gaya $F_1$ dan $F_2$ yang membentuk sudut $60^\circ$.</p>
+                <div style="text-align:center; padding:15px">
+                    <svg width="200" height="150" viewBox="0 0 200 150">
+                        <line x1="40" y1="120" x2="140" y2="120" stroke="blue" stroke-width="3" marker-end="url(#arrow)"/>
+                        <line x1="40" y1="120" x2="90" y2="40" stroke="blue" stroke-width="3" marker-end="url(#arrow)"/>
+                        <path d="M140,120 L190,40 L90,40" fill="none" stroke="#ccc" stroke-dasharray="4"/>
+                        <line x1="40" y1="120" x2="190" y2="40" stroke="red" stroke-width="4" marker-end="url(#arrow)"/>
+                        <text x="80" y="135" font-size="12">$F_1$</text>
+                        <text x="45" y="80" font-size="12">$F_2$</text>
+                        <text x="120" y="70" font-size="12" fill="red" font-weight="bold">R</text>
+                    </svg>
+                </div>
+            </div>
+            <div class="card">
+                <h3>Contoh 2: Poligon (3 Vektor)</h3>
+                <p>Menggambar resultan $A + B + C$ dengan metode sambung-menyambung.</p>
+                <div style="text-align:center; padding:15px">
+                    <svg width="200" height="150" viewBox="0 0 200 150">
+                        <line x1="30" y1="120" x2="80" y2="120" stroke="blue" stroke-width="2" marker-end="url(#arrow)"/>
+                        <line x1="80" y1="120" x2="110" y2="70" stroke="green" stroke-width="2" marker-end="url(#arrow)"/>
+                        <line x1="110" y1="70" x2="160" y2="80" stroke="orange" stroke-width="2" marker-end="url(#arrow)"/>
+                        <line x1="30" y1="120" x2="160" y2="80" stroke="red" stroke-width="3" stroke-dasharray="4" marker-end="url(#arrow)"/>
+                        <text x="100" y="110" font-size="14" fill="red">R</text>
+                    </svg>
+                </div>
+            </div>
+            <!-- More cards will be similar -->
+        </div>
+    </section>
+
+    <!-- SECTION LATIHAN -->
+    <section id="sec-latihan" class="hidden">
+        <div class="card" id="quiz-box">
+            <div id="quiz-header">
+                <h2 id="quiz-title">Latihan Soal</h2>
+                <div class="progress-bar-container" style="height:8px">
+                    <div id="quiz-progress-fill" style="width:0%; background:var(--navy); height:100%"></div>
+                </div>
+            </div>
+            <div id="quiz-content" style="margin-top:20px">
+                <!-- Dinamis -->
+            </div>
+            <div id="quiz-feedback" style="margin-top:15px; font-weight:bold; height:24px"></div>
+            <div id="quiz-footer" style="margin-top:20px; text-align:right">
+                <button class="btn-start" style="padding:10px 20px" onclick="checkQuizAnswer()">Periksa Jawaban</button>
+            </div>
+        </div>
+
+        <div id="certificate-box" class="card hidden" style="text-align:center; border: 5px double var(--navy)">
+            <h1 style="color:var(--navy)">🎉 LUAR BIASA! 🎉</h1>
+            <p>Kamu telah menyelesaikan seluruh tantangan Vektor.</p>
+            <div style="font-size: 5rem; margin: 20px">🏆</div>
+            <h2 id="final-score">Skor Kamu: 100</h2>
+            <p>RITA OKTAVI NENSI, S.Pd mengapresiasi semangat belajarmu!</p>
+            <button class="btn-start" style="margin-top:20px" onclick="resetLatihan()">Ulangi Latihan</button>
+        </div>
+    </section>
+
+    <!-- SECTION REFLEKSI -->
+    <section id="sec-refleksi" class="hidden">
+        <div class="card">
+            <h2>🤔 Refleksi Belajar</h2>
+            <p style="margin-bottom:20px">Luangkan waktu sejenak untuk memikirkan apa yang sudah kamu pahami.</p>
+            
+            <div style="margin-bottom:20px">
+                <h4>Apa yang paling kamu pahami hari ini?</h4>
+                <textarea id="ref-text" style="width:100%; height:80px; padding:10px; border-radius:10px; border:1px solid #ccc; margin-top:10px" placeholder="Tuliskan di sini..."></textarea>
+            </div>
+
+            <div style="margin-bottom:20px">
+                <h4>Sejauh mana pemahamanmu?</h4>
+                <label style="display:block"><input type="checkbox" class="ref-check"> Saya tahu perbedaan jajar genjang dan poligon.</label>
+                <label style="display:block"><input type="checkbox" class="ref-check"> Saya bisa menentukan titik pangkal dan ujung.</label>
+                <label style="display:block"><input type="checkbox" class="ref-check"> Saya bisa melukis garis bantu resultan.</label>
+            </div>
+
+            <div>
+                <h4>Bagaimana perasaanmu?</h4>
+                <div style="display:flex; gap:20px; font-size:2.5rem; margin-top:10px">
+                    <span style="cursor:pointer; filter:grayscale(1)" onclick="setEmoji(this, 'senang')" title="Senang">😊</span>
+                    <span style="cursor:pointer; filter:grayscale(1)" onclick="setEmoji(this, 'paham')" title="Cukup Paham">😐</span>
+                    <span style="cursor:pointer; filter:grayscale(1)" onclick="setEmoji(this, 'belajar')" title="Masih Belajar">😕</span>
+                </div>
+            </div>
+
+            <button class="btn-start" style="margin-top:30px; padding:10px 25px" onclick="saveRefleksi()">Simpan Refleksi</button>
+        </div>
+
+        <div class="card" id="ringkasan-box">
+            <h3>Ringkasan Hasil Belajar</h3>
+            <p id="summary-content">Belum ada data refleksi.</p>
+        </div>
+    </section>
+
+    <!-- SECTION PENGEMBANG -->
+    <section id="sec-pengembang" class="hidden">
+        <div class="card" style="text-align:center">
+            <div style="width:120px; height:120px; background:var(--blue-light); border-radius:50%; margin: 0 auto 20px; display:flex; align-items:center; justify-content:center; font-size:3rem">👤</div>
+            <h2 style="color:var(--navy)">RITA OKTAVI NENSI, S.Pd</h2>
+            <p>GURU FISIKA SMAN 1 BANUHAMPU</p>
+            <div style="margin:20px auto; max-width:500px; padding:20px; border-top:1px solid #eee">
+                <p><b>Materi:</b> Menggambar Resultan Vektor</p>
+                <p><b>Target:</b> Kelas XI SMA/MA</p>
+                <p><b>Tujuan:</b> Memudahkan siswa memvisualisasikan penjumlahan vektor melalui metode grafis secara mandiri.</p>
+            </div>
+            <p style="color:#888; font-size:0.9rem">&copy; 2024 - Media Pembelajaran Fisika Interaktif</p>
+        </div>
+    </section>
+</main>
+
+<!-- AUDIO ELEMENTS -->
+<audio id="audio-click" preload="auto"></audio>
+<audio id="audio-correct" preload="auto"></audio>
+<audio id="audio-wrong" preload="auto"></audio>
+<audio id="audio-bgm" loop preload="auto"></audio>
+
+<script>
+    /* --- DATA & STATE --- */
+    let state = {
+        currentPage: 'beranda',
+        materiPage: 1,
+        progress: 0,
+        quizIndex: 0,
+        score: 0,
+        isMuted: true,
+        isFullscreen: false,
+        completedMateri: new Set(),
+        quizAnswers: []
+    };
+
+    const materiData = {
+        1: {
+            title: "Apa itu Resultan Vektor?",
+            content: `
+                <p>Dalam fisika, seringkali sebuah benda dipengaruhi oleh lebih dari satu gaya (vektor). <b>Resultan Vektor</b> adalah satu vektor tunggal yang merupakan hasil penjumlahan dari beberapa vektor tersebut.</p>
+                <div style="text-align:center; margin:20px 0;">
+                    <svg width="200" height="100" viewBox="0 0 200 100">
+                        <line x1="20" y1="50" x2="80" y2="50" stroke="blue" stroke-width="4" marker-end="url(#arrow)"/>
+                        <text x="90" y="55" font-size="24">+</text>
+                        <line x1="110" y1="50" x2="170" y2="50" stroke="blue" stroke-width="4" marker-end="url(#arrow)"/>
+                        <text x="45" y="40">A</text><text x="135" y="40">B</text>
+                    </svg>
+                    <p><i>Penjumlahan vektor tidak sama dengan penjumlahan matematika biasa karena memiliki <b>ARAH</b>.</i></p>
+                </div>
+            `,
+            audioText: "Resultan Vektor adalah satu vektor tunggal yang merupakan hasil penjumlahan dari beberapa vektor. Ingat, penjumlahan vektor melibatkan arah, bukan sekadar angka."
+        },
+        2: {
+            title: "Metode Jajar Genjang",
+            content: `
+                <p>Metode ini sangat cocok untuk menjumlahkan <b>dua vektor</b> yang berpangkal di titik yang sama.</p>
+                <ul style="margin: 15px 20px">
+                    <li>Gambarkan vektor pertama dan kedua dengan <b>pangkal berimpit</b>.</li>
+                    <li>Buat garis bantu sejajar vektor pertama di ujung vektor kedua.</li>
+                    <li>Buat garis bantu sejajar vektor kedua di ujung vektor pertama.</li>
+                    <li>Tarik garis dari pangkal ke titik potong garis bantu. Itulah <b>Resultannya</b>!</li>
+                </ul>
+            `,
+            audioText: "Metode jajar genjang digunakan untuk dua vektor dengan pangkal yang sama. Caranya, buat garis bayangan sejajar setiap vektor hingga membentuk jajar genjang. Resultan ditarik dari pangkal ke ujung diagonal."
+        },
+        3: {
+            title: "Metode Poligon",
+            content: `
+                <p>Metode ini disebut juga metode <b>"Ujung-Pangkal"</b>. Sangat efektif untuk lebih dari dua vektor.</p>
+                <ul style="margin: 15px 20px">
+                    <li>Gambarkan vektor pertama.</li>
+                    <li>Gambarkan pangkal vektor kedua tepat di <b>ujung</b> vektor pertama.</li>
+                    <li>Jika ada vektor ketiga, letakkan pangkalnya di ujung vektor kedua.</li>
+                    <li>Resultan adalah garis lurus dari <b>pangkal pertama</b> ke <b>ujung terakhir</b>.</li>
+                </ul>
+            `,
+            audioText: "Metode poligon menyambungkan ujung vektor satu ke pangkal vektor berikutnya. Resultannya ditarik lurus dari titik awal perjalanan ke titik akhir."
+        },
+        4: {
+            title: "Flashcard Kunci",
+            content: `
+                <p>Klik kartu di bawah untuk menguji ingatanmu!</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:20px">
+                    <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">Metode Jajar Genjang?</div>
+                            <div class="flashcard-back">Untuk 2 vektor, pangkal bertemu pangkal.</div>
+                        </div>
+                    </div>
+                    <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                        <div class="flashcard-inner">
+                            <div class="flashcard-front">Metode Poligon?</div>
+                            <div class="flashcard-back">Banyak vektor, ujung bertemu pangkal.</div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            audioText: "Gunakan kartu ini untuk mengingat perbedaan utama antara metode jajar genjang dan metode poligon."
+        },
+        5: {
+            title: "Simulasi Eksplorasi",
+            content: `
+                <p>Geser ujung panah merah (Vektor B) untuk melihat perubahan Resultan (Garis Putus-putus) secara Real-time!</p>
+                <div class="sim-box">
+                    <canvas id="vectorSim" width="400" height="300"></canvas>
+                    <div id="sim-info" style="min-width:150px">
+                        <p><b>Vektor A:</b> Tetap (Horizontal)</p>
+                        <p><b>Vektor B:</b> Dapat Diubah</p>
+                        <hr style="margin:10px 0">
+                        <p>Sudut: <span id="val-angle">0</span>°</p>
+                    </div>
+                </div>
+            `,
+            audioText: "Coba gerakkan ujung vektor merah dan perhatikan bagaimana garis resultan putih berubah ukurannya. Semakin kecil sudutnya, semakin besar resultannya."
+        }
+    };
+
+    const quizData = [
+        {
+            type: 'tf',
+            q: "Pada metode jajar genjang, resultan ditarik dari ujung salah satu vektor.",
+            a: false,
+            hint: "Resultan ditarik dari pangkal persekutuan."
+        },
+        {
+            type: 'choice',
+            q: "Metode yang menyambungkan ujung vektor A ke pangkal vektor B disebut...",
+            options: ["Metode Analitis", "Metode Jajar Genjang", "Metode Poligon", "Metode Segitiga siku-siku"],
+            a: 2
+        },
+        {
+            type: 'tf',
+            q: "Penjumlahan dua vektor yang searah menghasilkan nilai resultan maksimum.",
+            a: true
+        },
+        {
+            type: 'matching',
+            q: "Cocokkan pasangan berikut (Tuliskan A, B, atau C):",
+            items: [
+                "Pangkal ketemu Pangkal",
+                "Ujung ketemu Pangkal",
+                "Garis lurus Awal ke Akhir"
+            ],
+            options: ["A. Resultan", "B. Jajar Genjang", "C. Poligon"],
+            a: ["B", "C", "A"]
+        },
+        {
+            type: 'drag',
+            q: "Urutkan langkah menggambar poligon (Tarik ke kotak):",
+            items: ["Gambar Vektor A", "Ujung A tempel Pangkal B", "Tarik Garis Awal ke Akhir"],
+            a: [0, 1, 2]
+        },
+        {
+            type: 'choice',
+            q: "Jika dua vektor saling berlawanan arah dengan besar yang sama, maka resultannya...",
+            options: ["Dua kali lipat", "Nol", "Sama dengan salah satu vektor", "Membentuk sudut 90 derajat"],
+            a: 1
+        }
+    ];
+
+    /* --- NAVIGATION --- */
+    function nav(page) {
+        playSound('click');
+        document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+        document.getElementById(`sec-${page}`).classList.remove('hidden');
+        
+        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+        document.getElementById(`nav-${page}`).classList.add('active');
+        
+        state.currentPage = page;
+        window.scrollTo(0, 0);
+
+        if (page === 'materi') showMateri(state.materiPage);
+        if (page === 'latihan') loadQuiz();
+    }
+
+    /* --- MATERI ENGINE --- */
+    function showMateri(id) {
+        state.materiPage = id;
+        const container = document.getElementById('materi-container');
+        const data = materiData[id];
+        
+        container.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px">
+                <h2 style="color:var(--navy)">${data.title}</h2>
+                <button class="tool-btn" style="background:var(--blue-main)" onclick="speakMateri()" title="Dengarkan">🔊</button>
+            </div>
+            <div id="materi-body">${data.content}</div>
+        `;
+
+        document.querySelectorAll('.tab-btn').forEach((b, i) => {
+            b.classList.toggle('active', i + 1 === id);
+        });
+
+        document.getElementById('btn-prev-materi').disabled = (id === 1);
+        document.getElementById('btn-next-materi').innerText = (id === 5) ? "Selesai Membaca" : "Berikutnya";
+
+        state.completedMateri.add(id);
+        updateOverallProgress();
+
+        if (id === 5) setTimeout(initSim, 100);
+    }
+
+    function nextMateri() {
+        if (state.materiPage < 5) {
+            showMateri(state.materiPage + 1);
+            playSound('click');
+        } else {
+            nav('contoh');
+        }
+    }
+
+    function prevMateri() {
+        if (state.materiPage > 1) {
+            showMateri(state.materiPage - 1);
+            playSound('click');
+        }
+    }
+
+    function speakMateri() {
+        const text = materiData[state.materiPage].audioText;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'id-ID';
+        window.speechSynthesis.speak(utterance);
+    }
+
+    /* --- SIMULASI ENGINE --- */
+    let simCanvas, simCtx, isDragging = false;
+    let vecB = { x: 300, y: 100 };
+    const origin = { x: 50, y: 200 };
+    const vecA = { x: 200, y: 0 };
+
+    function initSim() {
+        simCanvas = document.getElementById('vectorSim');
+        if (!simCanvas) return;
+        simCtx = simCanvas.getContext('2d');
+        
+        simCanvas.addEventListener('mousedown', startDrag);
+        simCanvas.addEventListener('mousemove', drag);
+        window.addEventListener('mouseup', endDrag);
+
+        simCanvas.addEventListener('touchstart', (e) => {
+            const touch = e.touches[0];
+            startDrag(touch);
+        });
+        simCanvas.addEventListener('touchmove', (e) => {
+            const touch = e.touches[0];
+            drag(touch);
+            e.preventDefault();
+        }, { passive: false });
+        
+        drawSim();
+    }
+
+    function startDrag(e) {
+        const rect = simCanvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        
+        const dist = Math.hypot(mouseX - vecB.x, mouseY - vecB.y);
+        if (dist < 20) isDragging = true;
+    }
+
+    function drag(e) {
+        if (!isDragging) return;
+        const rect = simCanvas.getBoundingClientRect();
+        vecB.x = e.clientX - rect.left;
+        vecB.y = e.clientY - rect.top;
+        drawSim();
+    }
+
+    function endDrag() { isDragging = false; }
+
+    function drawSim() {
+        simCtx.clearRect(0, 0, simCanvas.width, simCanvas.height);
+        
+        // Grid
+        simCtx.strokeStyle = "#eee";
+        simCtx.lineWidth = 1;
+        for(let i=0; i<simCanvas.width; i+=25) {
+            simCtx.beginPath(); simCtx.moveTo(i, 0); simCtx.lineTo(i, simCanvas.height); simCtx.stroke();
+            simCtx.beginPath(); simCtx.moveTo(0, i); simCtx.lineTo(simCanvas.width, i); simCtx.stroke();
+        }
+
+        // Vektor A (Biru)
+        drawArrow(origin.x, origin.y, origin.x + vecA.x, origin.y + vecA.y, "#2196f3", "A", 3);
+        
+        // Vektor B (Merah)
+        drawArrow(origin.x, origin.y, vecB.x, vecB.y, "#f44336", "B", 3);
+
+        // Resultan (Hijau)
+        const resX = (vecA.x) + (vecB.x - origin.x);
+        const resY = (vecA.y) + (vecB.y - origin.y);
+        drawArrow(origin.x, origin.y, origin.x + resX, origin.y + resY, "#4caf50", "R", 5);
+
+        // Garis Bantu (Putus-putus)
+        simCtx.setLineDash([5, 5]);
+        simCtx.strokeStyle = "#999";
+        simCtx.beginPath();
+        simCtx.moveTo(origin.x + vecA.x, origin.y + vecA.y);
+        simCtx.lineTo(origin.x + resX, origin.y + resY);
+        simCtx.moveTo(vecB.x, vecB.y);
+        simCtx.lineTo(origin.x + resX, origin.y + resY);
+        simCtx.stroke();
+        simCtx.setLineDash([]);
+
+        // Titik Kontrol B
+        simCtx.fillStyle = "#f44336";
+        simCtx.beginPath();
+        simCtx.arc(vecB.x, vecB.y, 8, 0, Math.PI*2);
+        simCtx.fill();
+
+        // Info Sudut
+        const dx = vecB.x - origin.x;
+        const dy = vecB.y - origin.y;
+        let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+        document.getElementById('val-angle').innerText = Math.abs(Math.round(angle));
+    }
+
+    function drawArrow(x1, y1, x2, y2, color, label, width) {
+        simCtx.strokeStyle = color;
+        simCtx.fillStyle = color;
+        simCtx.lineWidth = width;
+        
+        simCtx.beginPath();
+        simCtx.moveTo(x1, y1);
+        simCtx.lineTo(x2, y2);
+        simCtx.stroke();
+
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+        simCtx.beginPath();
+        simCtx.moveTo(x2, y2);
+        simCtx.lineTo(x2 - 12 * Math.cos(angle - Math.PI/7), y2 - 12 * Math.sin(angle - Math.PI/7));
+        simCtx.lineTo(x2 - 12 * Math.cos(angle + Math.PI/7), y2 - 12 * Math.sin(angle + Math.PI/7));
+        simCtx.fill();
+
+        simCtx.font = "bold 16px Arial";
+        simCtx.fillText(label, x2 + 5, y2 - 5);
+    }
+
+    /* --- LATIHAN ENGINE --- */
+    function loadQuiz() {
+        const q = quizData[state.quizIndex];
+        const content = document.getElementById('quiz-content');
+        const footer = document.getElementById('quiz-footer');
+        const feedback = document.getElementById('quiz-feedback');
+        
+        feedback.innerText = "";
+        document.getElementById('quiz-title').innerText = `Latihan Soal ${state.quizIndex + 1}/${quizData.length}`;
+        document.getElementById('quiz-progress-fill').style.width = `${(state.quizIndex / quizData.length) * 100}%`;
+
+        let html = `<h3>${q.q}</h3><div style="margin-top:20px">`;
+
+        if (q.type === 'tf') {
+            html += `
+                <div class="quiz-option" onclick="setQuizAns(true, this)">BENAR</div>
+                <div class="quiz-option" onclick="setQuizAns(false, this)">SALAH</div>
+            `;
+        } else if (q.type === 'choice') {
+            q.options.forEach((opt, idx) => {
+                html += `<div class="quiz-option" onclick="setQuizAns(${idx}, this)">${opt}</div>`;
+            });
+        } else if (q.type === 'matching') {
+            q.items.forEach((item, idx) => {
+                html += `
+                    <div style="display:flex; align-items:center; margin-bottom:10px">
+                        <div style="flex:1">${item}</div>
+                        <input type="text" class="match-input" style="width:40px; text-align:center; padding:5px" maxlength="1">
+                    </div>
+                `;
+            });
+            html += `<p style="font-size:0.9rem; color:#666">${q.options.join(' | ')}</p>`;
+        } else if (q.type === 'drag') {
+            html += `<div class="drop-zone" id="drop-container" ondrop="drop(event)" ondragover="allowDrop(event)"></div>`;
+            html += `<div style="display:flex; gap:10px; margin-top:15px">`;
+            q.items.forEach((item, idx) => {
+                html += `<div class="drag-item" draggable="true" ondragstart="dragItem(event)" id="drag-${idx}">${item}</div>`;
+            });
+            html += `</div>`;
+        }
+
+        html += `</div>`;
+        content.innerHTML = html;
+        footer.innerHTML = `<button class="btn-start" style="padding:10px 20px" onclick="checkQuizAnswer()">Periksa Jawaban</button>`;
+        state.currentAns = null;
+    }
+
+    function setQuizAns(val, el) {
+        playSound('click');
+        state.currentAns = val;
+        document.querySelectorAll('.quiz-option').forEach(o => o.style.borderColor = "#eee");
+        el.style.borderColor = "var(--blue-main)";
+        el.style.background = "var(--blue-light)";
+    }
+
+    function checkQuizAnswer() {
+        const q = quizData[state.quizIndex];
+        let correct = false;
+
+        if (q.type === 'tf' || q.type === 'choice') {
+            correct = (state.currentAns === q.a);
+        } else if (q.type === 'matching') {
+            const inputs = document.querySelectorAll('.match-input');
+            const userAns = Array.from(inputs).map(i => i.value.toUpperCase());
+            correct = JSON.stringify(userAns) === JSON.stringify(q.a);
+        } else if (q.type === 'drag') {
+            const dropped = document.getElementById('drop-container').children;
+            const userAns = Array.from(dropped).map(d => parseInt(d.id.split('-')[1]));
+            correct = JSON.stringify(userAns) === JSON.stringify(q.a);
+        }
+
+        const feedback = document.getElementById('quiz-feedback');
+        if (correct) {
+            feedback.innerText = "Bagus! Jawaban kamu benar. ✨";
+            feedback.style.color = "green";
+            state.score += 10;
+            playSound('correct');
+        } else {
+            feedback.innerText = q.hint ? `Kurang tepat. ${q.hint}` : "Jawabanmu kurang tepat, ayo coba lagi!";
+            feedback.style.color = "red";
+            playSound('wrong');
+        }
+
+        document.getElementById('quiz-footer').innerHTML = `<button class="btn-start" style="padding:10px 20px; background:var(--navy)" onclick="nextQuiz()">Lanjut</button>`;
+    }
+
+    function nextQuiz() {
+        state.quizIndex++;
+        if (state.quizIndex < quizData.length) {
+            loadQuiz();
+        } else {
+            finishQuiz();
+        }
+    }
+
+    function finishQuiz() {
+        document.getElementById('quiz-box').classList.add('hidden');
+        document.getElementById('certificate-box').classList.remove('hidden');
+        document.getElementById('final-score').innerText = `Skor Akhir Kamu: ${Math.round((state.score / (quizData.length * 10)) * 100)}`;
+        updateOverallProgress();
+    }
+
+    function resetLatihan() {
+        state.quizIndex = 0;
+        state.score = 0;
+        document.getElementById('certificate-box').classList.add('hidden');
+        document.getElementById('quiz-box').classList.remove('hidden');
+        loadQuiz();
+    }
+
+    /* --- DRAG & DROP UTILS --- */
+    function allowDrop(ev) { ev.preventDefault(); }
+    function dragItem(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+    function drop(ev) {
+        ev.preventDefault();
+        const data = ev.dataTransfer.getData("text");
+        ev.target.appendChild(document.getElementById(data));
+        playSound('click');
+    }
+
+    /* --- PROGRESS & STORAGE --- */
+    function updateOverallProgress() {
+        const totalSteps = 5 + 1; // 5 Materi + Quiz
+        const currentSteps = state.completedMateri.size + (state.quizIndex >= quizData.length ? 1 : 0);
+        state.progress = Math.round((currentSteps / totalSteps) * 100);
+        
+        document.getElementById('main-progress-fill').style.width = `${state.progress}%`;
+        document.getElementById('progress-text').innerText = `${state.progress}% Selesai`;
+
+        const badges = ["🥚 Pemula", "🐣 Pelajar", "🐥 Paham", "🦅 Master Vektor"];
+        let badgeIdx = Math.floor(state.progress / 30);
+        if (badgeIdx > 3) badgeIdx = 3;
+        
+        const badgeIcons = ["🥚", "🐣", "🐥", "🦅"];
+        document.getElementById('badge-display').innerText = badgeIcons[badgeIdx];
+        document.getElementById('badge-name').innerText = badges[badgeIdx];
+
+        localStorage.setItem('vektor_state', JSON.stringify(state));
+    }
+
+    /* --- REFLEKSI --- */
+    function setEmoji(el, val) {
+        document.querySelectorAll('[onclick^="setEmoji"]').forEach(s => s.style.filter = "grayscale(1)");
+        el.style.filter = "grayscale(0)";
+        state.currentEmoji = val;
+    }
+
+    function saveRefleksi() {
+        const text = document.getElementById('ref-text').value;
+        const checks = document.querySelectorAll('.ref-check:checked').length;
+        
+        document.getElementById('summary-content').innerHTML = `
+            <p><b>Pemahaman:</b> ${checks}/3 Indikator</p>
+            <p><b>Catatan:</b> ${text || '-'}</p>
+            <p><b>Status:</b> ${state.currentEmoji || 'Belum dipilih'}</p>
+        `;
+        playSound('correct');
+    }
+
+    /* --- AUDIO & TOOLS --- */
+    function toggleMute() {
+        state.isMuted = !state.isMuted;
+        const icon = document.getElementById('audio-icon');
+        if (state.isMuted) {
+            icon.innerHTML = '<path d="M16.5,12L19.29,14.79L20.71,13.38L17.91,10.59L20.71,7.79L19.29,6.38L16.5,9.17L13.71,6.38L12.29,7.79L15.09,10.59L12.29,13.38L13.71,14.79L16.5,12M3,9V15H7L12,20V4L7,9H3Z"/>';
+        } else {
+            icon.innerHTML = '<path d="M14,3.23V5.29C16.89,6.15 19,8.83 19,12C19,15.17 16.89,17.85 14,18.71V20.77C18.01,19.86 21,16.28 21,12C21,7.72 18.01,4.14 14,3.23M16.5,12C16.5,10.23 15.5,8.71 14,7.97V16.02C15.5,15.29 16.5,13.77 16.5,12M3,9V15H7L12,20V4L7,9H3Z"/>';
+        }
+    }
+
+    function playSound(type) {
+        if (state.isMuted) return;
+        // In physical file, these would play. Here we simulate with synth
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'click') {
+            osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        } else if (type === 'correct') {
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.2);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+        } else if (type === 'wrong') {
+            osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.2);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+        }
+    }
+
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            if (document.exitFullscreen) document.exitFullscreen();
+        }
+    }
+
+    /* --- INIT --- */
+    window.onload = () => {
+        const saved = localStorage.getItem('vektor_state');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            state.completedMateri = new Set(parsed.completedMateri);
+            updateOverallProgress();
+        }
+    };
+</script>
+
+</body>
+</html>
